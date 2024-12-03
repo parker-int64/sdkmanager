@@ -1,12 +1,36 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router';
+//font
+import "@fontsource/montserrat"
+
 </script>
 
 <template>
-
+  <div id="app">
+    <q-layout view="lhr lpR lfr">
+      <q-page-container>
+        <router-view />
+      </q-page-container>
+    </q-layout>
+  </div>
 </template>
 
-<style scoped>
+<style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Montserrat";
+}
+
+html {
+  height: 100%;
+  overflow-y: auto;
+}
+
 /* cancel the default style of router */
 .router-link-active {
   text-decoration: none;
