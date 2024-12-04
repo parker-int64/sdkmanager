@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-
+import DeviceSelector from "../components/DeviceSelector.vue"
 const step = ref(1)
-
 </script>
 
 <template>
@@ -11,7 +10,7 @@ const step = ref(1)
             <q-img src="/logo.webp" style="max-width: 200px; height: 100px;" fit="contain" />
             <q-space />
             <div class="q-pa-sm q-gutter-lg">
-                <q-btn round class="icon-btn" icon="settings" />
+                <q-btn round class="icon-btn" @click="" icon="settings" />
                 <q-btn round class="icon-btn" icon="mdi-help" />
             </div>
         </div>
@@ -23,30 +22,35 @@ const step = ref(1)
                 class="stepper" animated>
                 <q-step :name="1" title="CHOOSE DEVICE" icon="monitor" :done="step > 1" :header-nav="step > 1"
                     text-weight-regular>
-                    Please select your product. Or you can choose your carrier board with module.
+                    
+                    <div class="q-gutter-y-md column justify-between flex-center stepper" >
+                        <p style="align-self: flex-start;">Please select your product. Or you can choose your carrier board with module.</p>
+                        <DeviceSelector />
+                        <q-separator />
+    
+                        <q-stepper-navigation class="row justify-between">
+                            <q-btn @click="() => { done1 = true; step = 2 }" color="green" label="NEXT" />
+                        </q-stepper-navigation>
+                    </div>
 
-
-                    <q-stepper-navigation>
-                        <q-btn @click="() => { done1 = true; step = 2 }" color="primary" label="NEXT" />
-                    </q-stepper-navigation>
                 </q-step>
 
                 <q-step :name="2" title="CHOOSE JETPACK" icon="create_new_folder" :done="step > 2"
                     :header-nav="step > 2">
                     Select the JetPack you want to flash.
 
-                    <q-stepper-navigation>
-                        <q-btn flat @click="step = 1" color="primary" label="BACK" class="q-ml-sm" />
-                        <q-btn @click="() => { done2 = true; step = 3 }" color="primary" label="NEXT" />
+                    <q-stepper-navigation class="row justify-between">
+                        <q-btn flat @click="step = 1" color="black" label="BACK" class="q-ml-sm" />
+                        <q-btn @click="() => { done2 = true; step = 3 }" color="green" label="NEXT" />
                     </q-stepper-navigation>
                 </q-step>
 
                 <q-step :name="3" title="USB TARGET" icon="usb" :header-nav="step > 3">
                     Select a USB target.
 
-                    <q-stepper-navigation>
-                        <q-btn flat @click="step = 2" color="primary" label="BACK" class="q-ml-sm" />
-                        <q-btn color="primary" @click="done3 = true" label="FLASH" />
+                    <q-stepper-navigation class="row justify-between">
+                        <q-btn flat @click="step = 2" color="black" label="BACK" class="q-ml-sm" />
+                        <q-btn color="green" @click="done3 = true" label="FLASH" />
                     </q-stepper-navigation>
                 </q-step>
             </q-stepper>
