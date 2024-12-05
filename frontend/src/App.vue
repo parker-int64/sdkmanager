@@ -6,7 +6,7 @@ import "@fontsource/montserrat"
 </script>
 
 <template>
-  <div id="app">
+  <div id="app" class="_app">
     <q-layout view="lhr lpR lfr">
       <q-page-container>
         <router-view />
@@ -29,6 +29,10 @@ body {
 html {
   height: 100%;
   overflow-y: auto;
+}
+
+._app {
+  background-color: #fcf8f7;
 }
 
 /* cancel the default style of router */
