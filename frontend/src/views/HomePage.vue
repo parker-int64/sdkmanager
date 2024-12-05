@@ -18,17 +18,17 @@ const step = ref(1)
         <div class="q-pa-md op-area">
             <!-- <q-btn label="Reset" push color="white" text-color="green" @click="step = 1" class="q-mb-md" /> -->
 
-            <q-stepper v-model="step" header-nav ref="stepper" done-color="green" active-color="accent"
-                class="stepper" animated>
+            <q-stepper v-model="step" header-nav ref="stepper" done-color="green" active-color="accent" class="stepper"
+                animated>
                 <q-step :name="1" title="CHOOSE DEVICE" icon="monitor" :done="step > 1" :header-nav="step > 1"
-                    text-weight-regular>
-                    
-                    <div class="q-gutter-y-md column justify-between flex-center stepper" >
+                    text-weight-regular class="column stepper">
+
+                    <div class="q-gutter-y-md column justify-between flex-center stepper">
                         <p style="align-self: flex-start;">Select your device.</p>
                         <DeviceSelector />
                         <q-separator />
-    
-                        <q-stepper-navigation class="row justify-between">
+
+                        <q-stepper-navigation class="row justify-end" style="width: 100%;">
                             <q-btn @click="() => { done1 = true; step = 2 }" color="primary" label="NEXT" />
                         </q-stepper-navigation>
                     </div>
@@ -37,7 +37,7 @@ const step = ref(1)
 
                 <q-step :name="2" title="CHOOSE JETPACK" icon="create_new_folder" :done="step > 2"
                     :header-nav="step > 2">
-                    Select a JetPack version.
+                    Select a JetPack.
 
                     <q-stepper-navigation class="row justify-between">
                         <q-btn flat @click="step = 1" color="black" label="BACK" class="q-ml-sm" />
@@ -59,13 +59,14 @@ const step = ref(1)
 </template>
 
 <style scoped>
-
 .op-area {
+    max-width: 800px;
     height: 80dvh;
+    align-self: center;
 }
 
 .stepper {
-    height: 100%;
-    background-color: #f1edec;
+    background-color: #eeefe3;
+    overflow: hidden;
 }
 </style>

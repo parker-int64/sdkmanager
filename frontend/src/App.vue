@@ -32,7 +32,7 @@ html {
 }
 
 ._app {
-  background-color: #fcf8f7;
+  background-color: #fafaee;
 }
 
 /* cancel the default style of router */

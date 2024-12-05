@@ -10,12 +10,19 @@ const productOptions = [
   'reComputer Industrial J4011 with Orin NX 16GB'
 ]
 
-const options = ref(productOptions)
+const carrierOptions = [
+  'A203 with Jetson Nano Module',
+  'A203 with Jetson Xavier Module',
+  'A203 with Jetson Xavier NX Module',
+]
+
+const prodOptions = ref(productOptions)
+const carrOptions = ref(carrierOptions)
 
 const model = ref(null)
 
 const filterFn = (val, update) => {
-  if ( val === '' ) {
+  if (val === '') {
     update(() => {
       options.value = productOptions
     })
@@ -30,36 +37,30 @@ const update = (() => {
 
 </script>
 <template>
-  <q-tabs
-      v-model="panel"
-      dense
-      class="text-black"
-      active-color="primary"
-      indicator-color="primary"
-      align="justify"
-      narrow-indicator
-    >
-      <q-tab name="product" label="Product" />
-      <q-tab name="carrier" label="Carrier Board with Modules" />
+  <q-tabs v-model="panel" dense class="text-black" active-color="primary" indicator-color="primary" align="justify"
+    narrow-indicator>
+    <q-tab name="product" label="Product" />
+    <q-tab name="carrier" label="Carrier Board with Modules" />
   </q-tabs>
 
   <q-separator />
 
-  <q-tab-panels v-model="panel" animated>
-    <q-tab-panel name="product" style="background-color: #f1edec;">
-      <q-select
-        filled
-        v-model="model"
-        label="Product Name"
-        :options="productOptions"
-        style="width: 500px"
-        behavior="dialog"
-      />
+  <q-tab-panels class="tab-panel" v-model="panel" animated>
+    <q-tab-panel name="product" style="background-color: #eeefe3;">
+      <q-select filled v-model="model" label="Product Name" :options="prodOptions" style="width: 500px"
+        behavior="dialog" />
     </q-tab-panel>
 
-    <q-tab-panel name="carrier">
-      <div class="text-h6">Carrier Boards</div>
+    <q-tab-panel name="carrier" style="background-color: #eeefe3;">
+      <q-select filled v-model="model" label="Carrier Board with Module" :options="carrOptions" style="width: 500px"
+        behavior="dialog" />
     </q-tab-panel>
   </q-tab-panels>
 
 </template>
+
+<style scoped>
+.tab-panel {
+  overflow: hidden;
+}
+</style>
