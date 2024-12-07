@@ -19,7 +19,7 @@ int main()
 #endif
                 w.set_title("Seeed JetPack Imager");
                 w.set_size(800, 600, WEBVIEW_HINT_NONE);
-                // w.set_size(800, 600, WEBVIEW_HINT_MIN);
+                w.set_size(800, 600, WEBVIEW_HINT_MIN);
 
 #ifdef _WIN32
                 auto result = w.window().value();
