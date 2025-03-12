@@ -1,12 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import DeviceSelector from "../components/DeviceSelector.vue"
+import OSSelector from '../components/OSSelector.vue';
+import USBSelector from '../components/USBSelector.vue';
 const step = ref(1)
 </script>
 
 <template>
     <div class="column" style="height: 100dvh;">
-        <div class="row q-pa-md" style="height: 20dvh">
+        <div class="row q-pa-sm" style="height: 20dvh">
             <q-img src="/logo.webp" style="max-width: 200px; height: 100px;" fit="contain" />
             <q-space />
             <div class="q-pa-sm q-gutter-lg">
@@ -36,9 +38,9 @@ const step = ref(1)
                 </q-step>
 
                 <q-step :name="2" title="CHOOSE JETPACK" icon="create_new_folder" :done="step > 2"
-                    :header-nav="step > 2">
-                    Select a JetPack.
-
+                    :header-nav="step > 2" class="stepper">
+                    <p>Select a JetPack.</p>
+                    <OSSelector />
                     <q-stepper-navigation class="row justify-between">
                         <q-btn flat @click="step = 1" color="black" label="BACK" class="q-ml-sm" />
                         <q-btn @click="() => { done2 = true; step = 3 }" color="primary" label="NEXT" />
@@ -46,7 +48,8 @@ const step = ref(1)
                 </q-step>
 
                 <q-step :name="3" title="USB TARGET" icon="usb" :header-nav="step > 3">
-                    Select a USB target.
+                    <p>Select a USB target.</p>
+                    <USBSelector />
 
                     <q-stepper-navigation class="row justify-between">
                         <q-btn flat @click="step = 2" color="black" label="BACK" class="q-ml-sm" />

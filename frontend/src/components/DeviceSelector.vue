@@ -1,3 +1,5 @@
+<!-- Device Selector Component -->
+
 <script setup>
 import { ref, onMounted } from 'vue';
 
