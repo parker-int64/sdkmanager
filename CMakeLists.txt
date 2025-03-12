@@ -41,9 +41,15 @@ endif()
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE webview::core)
 
 
+add_subdirectory(src/OSFlashCore)
+
 # Install operations
 
 
 
 include(CPack)
+
+include(CTest)
+
+add_subdirectory(src/test/FileOperation)
 

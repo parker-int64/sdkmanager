@@ -2,18 +2,16 @@
 import { RouterView, RouterLink } from 'vue-router';
 //font
 import "@fontsource/montserrat"
-
 </script>
 
 <template>
-  <div id="app" class="_app">
-    <q-layout view="lhr lpR lfr">
-      <q-page-container>
-        <router-view />
-      </q-page-container>
-    </q-layout>
+  <div id="container" class="h-full">
+    <div id="content" class="h-screen flex flex-col pt-10 px-10 space-y-10">
+      <router-view />
+    </div>
   </div>
 </template>
+
 
 <style>
 html,
