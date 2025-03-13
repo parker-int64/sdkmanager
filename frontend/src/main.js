@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import router from './router/router'
 import './style.css'
 import '../node_modules/flowbite-vue/dist/index.css'
-
+import "inter-ui/inter.css";
 
 // Components
 import App from './App.vue'

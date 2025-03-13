@@ -2,67 +2,30 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { FwbCard, FwbSelect } from 'flowbite-vue'
 
-const panel = ref('product')
 
-const productOptions = [
-  'reComputer J1020 V2',
-  'reComputer J1030 V3',
-  'reComputer J1040 V4',
-  'reComputer Industrial J4011 with Orin NX 16GB'
+const selectedDevice = ref('')
+const jetsonDevices = [
+  { value: '0', name: 'reComputer J1010' },
+  { value: '1', name: 'reComputer J1020v2' },
 ]
-
-const carrierOptions = [
-  'A203 with Jetson Nano Module',
-  'A203 with Jetson Xavier Module',
-  'A203 with Jetson Xavier NX Module',
-]
-
-const prodOptions = ref(productOptions)
-const carrOptions = ref(carrierOptions)
-
-const model = ref(null)
-
-const filterFn = (val, update) => {
-  if (val === '') {
-    update(() => {
-      options.value = productOptions
-    })
-    return
-  }
-}
-
-const update = (() => {
-  const needle = val.toLowerCase()
-  options.value = productOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
-})
-
 </script>
+
 <template>
-  <q-tabs v-model="panel" dense class="text-black" active-color="primary" indicator-color="primary" align="justify"
-    narrow-indicator>
-    <q-tab name="product" label="Product" />
-    <q-tab name="carrier" label="Carrier Board with Modules" />
-  </q-tabs>
+  <fwb-card class="mx-auto my-10">
+    <div class="p-5 space-y-5">
+      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        Select your device
+      </h5>
+      <p class="font-normal text-gray-700 dark:text-gray-400">
+        We have supported for many devices.
+      </p>
+      <fwb-select v-model="selectedDevice" :options="jetsonDevices" label="Device Full Name" />
 
-  <q-separator />
-
-  <q-tab-panels class="tab-panel" v-model="panel" animated>
-    <q-tab-panel name="product" style="background-color: #eeefe3;">
-      <q-select filled v-model="model" label="Product Name" :options="prodOptions" style="width: 500px"
-        behavior="dialog" />
-    </q-tab-panel>
-
-    <q-tab-panel name="carrier" style="background-color: #eeefe3;">
-      <q-select filled v-model="model" label="Carrier Board with Module" :options="carrOptions" style="width: 500px"
-        behavior="dialog" />
-    </q-tab-panel>
-  </q-tab-panels>
-
+      <fwb-select v-model="selected" :options="jetsonDevices" label="JetPack" />
+    </div>
+  </fwb-card>
 </template>
 
-<style scoped>
-.tab-panel {
-  overflow: hidden;
-}
-</style>
+<style scoped></style>

@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fontsource/montserrat": "^5.2.5",
     "flowbite": "^2.5.2",
     "flowbite-vue": "^0.1.6",
+    "inter-ui": "^4.1.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
