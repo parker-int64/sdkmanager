@@ -11,9 +11,9 @@ const step = ref(1)
 </script>
 
 <template>
-  <div class="flex flex-col content-center">
-    <div class="w-full px-8 py-4">
-      <div class="relative flex items-center justify-between w-full">
+  <div class="flex flex-col">
+    <div class="self-center px-8 py-4 w-full max-w-xl md:space-y-8 lg:space-y-16">
+      <div class="relative flex items-center justify-between">
         <div class="absolute left-0 top-2/4 h-0.5 w-full -translate-y-2/4 bg-gray-300"></div>
         <div class="absolute left-0 top-2/4 h-0.5 w-full -translate-y-2/4 bg-gray-900 transition-all duration-500">
         </div>
@@ -43,9 +43,9 @@ const step = ref(1)
         </div>
       </div>
 
-      <HostConfig />
+      <HostConfig class="!max-w-full" />
 
-      <div class="flex justify-between mt-16">
+      <div class="flex justify-between">
         <button
           class="select-none rounded-lg bg-gray-900 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button" disabled>
