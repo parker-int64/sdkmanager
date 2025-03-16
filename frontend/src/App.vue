@@ -41,7 +41,7 @@ const toggleDarkMode = () => {
     <div id="content" class="h-screen flex flex-col">
       <AppHeader :toggleDarkMode="toggleDarkMode" v-model:isDarkMode="isDarkMode" />
       <div class="h-full px-20">
-        <router-view class="mx-auto mt-5" />
+        <router-view class="mx-auto mt-2" />
       </div>
 
     </div>
