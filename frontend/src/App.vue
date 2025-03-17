@@ -5,7 +5,7 @@ import { ref } from 'vue';
 import AppHeader from './components/AppHeader.vue'
 
 // For some vue component, you might need this ref to control dark mode.
-const isDarkMode = ref(localStorage.getItem('color-theme'))
+const isDarkMode = ref('light') // somehow localStorage.getItem('color-theme') is empty on some platform.
 
 const toggleDarkMode = () => {
 

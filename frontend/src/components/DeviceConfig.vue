@@ -2,7 +2,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { FwbCard, FwbSelect, FwbA } from 'flowbite-vue'
+import { FwbCard, FwbSelect } from 'flowbite-vue'
 
 
 const selectedDevice = ref('')

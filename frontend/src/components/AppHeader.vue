@@ -9,7 +9,7 @@ import { FwbImg, FwbButton } from 'flowbite-vue'
 <template>
   <div class="px-10 py-5 flex justify-between">
     <fwb-img v-show="isDarkMode === 'light'" alt="logo" src="/logo.webp" size="max-w-xs" />
-    <fwb-img v-show="isDarkMode === 'dark'" alt="logo" src="/logo-white.webp" size="max-w-xs" />
+    <fwb-img v-show="isDarkMode === 'dark'" alt="logo-white" src="/logo-white.webp" size="max-w-xs" />
     <div class="justify-self-end self-center space-x-10">
       <fwb-button pill square color="dark">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
