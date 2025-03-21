@@ -1,3 +1,6 @@
+#ifndef WSLCONTROLLER_H
+#define WSLCONTROLLER_H
+
 #include <QObject>
 #include <QString>
 
@@ -15,3 +18,6 @@ public:
 private:
     void handlePowerShellCommand(const QString &cmd);
 };
+
+#endif
+

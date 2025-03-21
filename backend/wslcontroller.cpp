@@ -1,5 +1,6 @@
 #include "wslcontroller.h"
 #include <QProcess>
+#include <QDebug>
 
 WSLController::WSLController(QObject *parent)
     : QObject(parent)

@@ -4,12 +4,14 @@ project(SDKManager VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6 REQUIRED COMPONENTS Quick WebEngineQuick)
+find_package(Qt6 6 REQUIRED COMPONENTS Quick WebEngineQuick WebChannel Network)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appSDKManager
     main.cpp
+    wslcontroller.h
+    wslcontroller.cpp
 )
 
 qt_add_qml_module(appSDKManager
@@ -34,6 +36,8 @@ target_link_libraries(appSDKManager
     PRIVATE
     Qt6::Quick
     Qt6::WebEngineQuick
+    Qt6::WebChannel
+    Qt6::Network
 )
 
 include(GNUInstallDirs)

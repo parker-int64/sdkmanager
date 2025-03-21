@@ -4,13 +4,25 @@
 import { ref, onMounted } from 'vue';
 import { FwbCard, FwbSelect, FwbA } from 'flowbite-vue'
 
-
 const selectedWSLDistro = ref('')
 const wslDistros = [
   { value: '0', name: 'Ubuntu-18.04' },
   { value: '1', name: 'Ubuntu-20.04' },
   { value: '2', name: 'Ubuntu-22.04' },
 ]
+
+/**
+ * Qt Related
+ */
+
+const resMesg = ref("Waiting for Qt Transmission")
+
+let wslcontroller = null
+
+onMounted(() => {
+
+})
+
 </script>
 
 <template>

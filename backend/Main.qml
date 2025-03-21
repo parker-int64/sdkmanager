@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtWebEngine
-
+import QtWebChannel
 Window {
     width: 800
     height: 600
@@ -10,7 +10,16 @@ Window {
     visible: true
     title: qsTr("SDK Manager")
     WebEngineView {
-            anchors.fill: parent
-            url: "http://localhost:5173/"
+        anchors.fill: parent
+        url: "http://localhost:5173/"
+
+        webChannel: WebChannel {
+            id: channel
+            registeredObjects: {
+                "controller": controller
+            }
         }
+    }
+
+    
 }
