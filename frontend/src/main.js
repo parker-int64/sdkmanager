@@ -11,15 +11,15 @@ export var qwebchannel = null
 
 
 window.onload = () => {
-    if ( window.qt === undefined ) {
+    if (window.qt === undefined) {
         console.error("Failed to Inject QtWebChannel...");
-        return ;
+        return;
     }
     new QWebChannel(window.qt.webChannelTransport, (channel) => {
         // all published objects are available in channel.objects under
         // the identifier set in their attached WebChannel.id property
         window.qwebchannel = channel;
-        window.controller = channel.objects.controller;
+        window.wslmanager = channel.objects.wslmanager
     })
     console.log("Info: Initialized QWebChannel.")
 }

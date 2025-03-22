@@ -1,16 +1,16 @@
-#ifndef WSLCONTROLLER_H
-#define WSLCONTROLLER_H
+#ifndef WSLMANAGER_H
+#define WSLMANAGER_H
 
 #include <QObject>
 #include <QString>
 
-class WSLController : public QObject
+class WSLManager : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit WSLController(QObject *parent = nullptr);
-    virtual ~WSLController();
+    explicit WSLManager(QObject *parent = nullptr);
+    virtual ~WSLManager();
 
     Q_SIGNAL void wslStarted();
     Q_SLOT void startWSL();
@@ -19,5 +19,4 @@ private:
     void handlePowerShellCommand(const QString &cmd);
 };
 
-#endif
-
+#endif // WSLMANAGER_H
