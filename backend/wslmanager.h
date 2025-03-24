@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QProcess>
 
 class WSLManager : public QObject
 {
@@ -12,11 +13,14 @@ public:
     explicit WSLManager(QObject *parent = nullptr);
     virtual ~WSLManager();
 
-    Q_SIGNAL void wslStarted();
-    Q_SLOT void startWSL();
+public slots:
+    void checkWSLVer();
+    void handleStdOutput();
 
 private:
-    void handlePowerShellCommand(const QString &cmd);
+    bool handlePSCmd(const QString &cmd);
+
+    QProcess m_process;
 };
 
 #endif // WSLMANAGER_H

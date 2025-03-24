@@ -17,7 +17,7 @@ const wslDistros = [
 const checkWSLInstall = () => {
   console.log(`Calling Qt Backend, emitting wslStarted.`)
   console.log(window.qwebchannel.objects.wslmanager)
-  window.qwebchannel.objects.wslmanager.startWSL()
+  window.qwebchannel.objects.wslmanager.checkWSLVer()
 }
 
 

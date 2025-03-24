@@ -1,49 +1,64 @@
 #include "wslmanager.h"
-#include <QProcess>
 #include <QDebug>
+#include <QByteArray>
+#include <QStringDecoder>
 
 WSLManager::WSLManager(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_process()
 {
-    // connect(this, SIGNAL(wslStarted), this, SLOT(startWSL));
+    // connect(m_process, SIGNAL(readyReadStandardOutput()), this, SLOT(handleStdOutput()));
 }
 
 WSLManager::~WSLManager()
 {
 }
 
-void WSLManager::startWSL()
+void WSLManager::checkWSLVer()
 {
     const QString command = "wsl -l";
-    handlePowerShellCommand(command);
-    emit wslStarted();
+    handlePSCmd(command);
 }
 
-void WSLManager::handlePowerShellCommand(const QString &command)
+/// @brief
+/// @param command
+/// @return
+bool WSLManager::handlePSCmd(const QString &command)
 {
-    QProcess process;
 
-    QString fullCommand = QString("powershell.exe -Command '%1'").arg(command);
+    m_process.start("powershell.exe", {"-Command", "wsl", "-v"});
+    m_process.setReadChannel(QProcess::StandardOutput);
+    qDebug() << "Calling: " << __FUNCTION__ << "Variable 'fullcommand': " << command << Qt::endl;
 
-    qDebug() << "Calling: " << __FUNCTION__ << "Variable 'fullcommand': " << fullCommand;
-
-    process.start(fullCommand);
-    if (!process.waitForFinished())
+    if (!m_process.waitForFinished())
     {
-        qWarning() << "Failed to execute command:" << command;
-        return;
+        qWarning() << "Failed to execute command:" << command << Qt::endl;
+        return false;
     }
 
-    QString rawArray = process.readAllStandardOutput();
-    QString errorOutput = process.readAllStandardError();
+    QByteArray rawArray = m_process.readAllStandardOutput();
+    QByteArray errorOutput = m_process.readAllStandardError();
+
+    QStringDecoder decoder(QStringDecoder::Utf16LE); // Decode UTF-16LE
+
+    QString output = decoder.decode(rawArray);
 
     if (!rawArray.isEmpty())
     {
-        qDebug() << "[Output]" << rawArray.trimmed();
+        qDebug() << "[Output]" << output.trimmed();
+        return true;
     }
 
     if (!errorOutput.isEmpty())
     {
-        qWarning() << "[Error]" << errorOutput.trimmed();
+        qWarning() << "[Error]" << QString::fromUtf8(errorOutput).trimmed();
+        return false;
     }
+
+    return false;
+}
+
+void WSLManager::handleStdOutput()
+{
+    // QTextCodec
 }
