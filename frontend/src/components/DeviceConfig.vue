@@ -21,7 +21,7 @@ const jetPackVers = [
 </script>
 
 <template>
-  <fwb-card class="mx-auto my-10">
+  <fwb-card class="mx-auto my-10 !max-w-full">
     <div class="flex">
       <div class="p-5 space-y-5">
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">

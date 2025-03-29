@@ -1,10 +1,18 @@
 <!-- Host Configuration Component -->
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { FwbCard, FwbSelect, FwbA, FwbButton } from 'flowbite-vue'
-import { qwebchannel } from "../main"
+import { onMounted, ref } from 'vue';
+import {
+  FwbCard, FwbSelect, FwbA, FwbButton, FwbModal, FwbTable,
+  FwbTableBody,
+  FwbTableCell,
+  FwbTableHead,
+  FwbTableHeadCell,
+  FwbTableRow,
+} from 'flowbite-vue'
+import { wslManager, waitForQWebChannel } from '../main';
 const selectedWSLDistro = ref('')
+
 const wslDistros = [
   { value: '0', name: 'Ubuntu-18.04' },
   { value: '1', name: 'Ubuntu-20.04' },
@@ -14,23 +22,56 @@ const wslDistros = [
 /**
  * Qt Related
  */
-const checkWSLInstall = () => {
-  console.log(`Calling Qt Backend, emitting wslStarted.`)
-  console.log(window.qwebchannel.objects.wslmanager)
-  window.qwebchannel.objects.wslmanager.checkWSLVer()
+
+const wslInfoDisplay = ref(null)
+
+const refreshDistros = () => {
+  console.log("Refresh WSL info...")
+  parseWSLInfo()
 }
 
+const parseWSLInfo = () => {
+  wslManager.getWSLInfo()
+  wslManager.wslInfoReceived.connect((obj) => {
+    if (Object.keys(obj).length !== 0) {
+      wslInfoDisplay.value = obj
+    } else {
+      wslInfoDisplay.value = null
+    }
+  })
+}
+
+/**
+ * WSL Modal Related
+ */
+const isShowModal = ref(false)
+
+const closeModal = () => {
+  isShowModal.value = false
+}
+const showModal = () => {
+  isShowModal.value = true
+}
+
+
+/**
+ * Some Vue Lifecycle Functions
+*/
+onMounted(async () => {
+  await waitForQWebChannel();
+  parseWSLInfo()
+})
 
 </script>
 
 <template>
-  <fwb-card class="mx-auto my-10">
+  <fwb-card class="mx-auto my-10 !max-w-full">
     <div class="flex">
       <div class="p-5 space-y-5">
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           Setup Your Host Environment
         </h5>
-        <p class="font-normal text-gray-700 dark:text-gray-400">
+        <p class="text-gray-700 dark:text-gray-400">
           Using WSL2 to flash the device.
         </p>
 
@@ -43,18 +84,49 @@ const checkWSLInstall = () => {
               </fwb-a>
             </template>
           </fwb-select>
-          <fwb-button class="self-center" size="xs" color="dark" outline pill square @click="checkWSLInstall">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-              stroke="currentColor" class="size-3">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-            </svg>
-          </fwb-button>
         </div>
+        <fwb-button size="xs" color="dark" outline pill square @click="refreshDistros">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-3">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+        </fwb-button>
+        <fwb-button class="ml-10" size="xs" color="dark" outline pill square @click="showModal">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-3">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+        </fwb-button>
       </div>
       <img class="object-scale-down w-full mx-auto h-96 md:h-auto md:w-48" src="https://placehold.co/128x128" alt="">
     </div>
   </fwb-card>
+
+  <!-- Modal -->
+  <fwb-modal v-if="isShowModal" @close="closeModal">
+    <template #header>
+      <div class="flex items-center text-lg text-gray-700 dark:text-white">
+        WSL Information
+      </div>
+    </template>
+    <template #body>
+      <fwb-table>
+        <fwb-table-head>
+          <fwb-table-head-cell>Name</fwb-table-head-cell>
+          <fwb-table-head-cell>Value</fwb-table-head-cell>
+        </fwb-table-head>
+        <fwb-table-body>
+          <fwb-table-row v-for="(value, key) in wslInfoDisplay" :key="key">
+            <fwb-table-cell>{{ key }}</fwb-table-cell>
+            <fwb-table-cell>{{ value }}</fwb-table-cell>
+          </fwb-table-row>
+        </fwb-table-body>
+      </fwb-table>
+    </template>
+  </fwb-modal>
+  <!-- End of Modal -->
 </template>
 
 <style scoped></style>

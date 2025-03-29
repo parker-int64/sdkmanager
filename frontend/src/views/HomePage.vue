@@ -6,7 +6,6 @@ import HostConfig from '../components/HostConfig.vue';
 
 
 import Stepper from '../components/Stepper.vue'
-import OperationButtons from '../components/OperationButtons.vue'
 
 import { FwbButton } from 'flowbite-vue';
 
@@ -44,14 +43,10 @@ const onFlashBtnClicked = () => {
     <div class="self-center px-8 py-4 w-full max-w-xl md:space-y-8 lg:space-y-16">
       <Stepper v-model:curFlashStep="curFlashStep" />
 
-      <HostConfig v-if="curFlashStep === 1" class="!max-w-full" />
-      <DeviceConfig v-else-if="curFlashStep === 2" class="!max-w-full" />
-      <USBSelector v-else class="!max-w-full" />
+      <HostConfig v-if="curFlashStep === 1" />
+      <DeviceConfig v-else-if="curFlashStep === 2" />
+      <USBSelector v-else />
 
-
-
-      <!-- <OperationButtons :onPrevBtnClicked="onPrevBtnClicked" :onNextBtnClicked="onNextBtnClicked"
-        :onFlashBtnClicked="onFlashBtnClicked" v-model:curFlashStep="curFlashStep" /> -->
     </div>
   </div>
 
