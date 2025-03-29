@@ -1,11 +1,15 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router';
 
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import AppHeader from './components/AppHeader.vue'
 
 // For some vue component, you might need this ref to control dark mode.
-const isDarkMode = ref(localStorage.getItem('color-theme')) // somehow localStorage.getItem('color-theme') is empty on some platform.
+const getPreferredTheme = () => {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};
+const storedTheme = localStorage.getItem('color-theme') ?? getPreferredTheme();
+const isDarkMode = ref(storedTheme)
 
 const toggleDarkMode = () => {
 
@@ -34,6 +38,17 @@ const toggleDarkMode = () => {
     }
   }
 }
+
+onMounted(() => {
+  const theme = localStorage.getItem('color-theme');
+  if (theme) {
+    isDarkMode.value = theme;
+  }
+});
+
+watch(isDarkMode, (newTheme) => {
+  localStorage.setItem('color-theme', newTheme);
+});
 </script>
 
 <template>
