@@ -46,19 +46,10 @@ void WSLManager::processWSLInfoStr(const QString &str)
     QStringList list = str.split(regex, Qt::SkipEmptyParts);
 
     QVariantMap m; // JSON object
+    QString key, value;
     // output
     for (int i = 0; i < list.size() - 1; i += 2)
     {
-        QString key, value;
-        if (i == 0)
-        {
-            QStringList t = value.split(".");
-            for (auto j : t)
-            {
-                m_wslVersion.emplace_back(j.toInt());
-            }
-        }
-
         key = list[i].trimmed();
         value = list[i + 1].trimmed();
         m.insert(key, value);
