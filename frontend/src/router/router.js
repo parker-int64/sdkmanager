@@ -15,6 +15,11 @@ const router = createRouter({
             name: 'settings',
             component: () => import('../views/SettingsPage.vue')
         },
+        {
+            path: '/error/:errStr',
+            name: 'error',
+            component: () => import('../views/ErrorPage.vue')
+        }
 
 
     ],
