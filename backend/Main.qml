@@ -11,6 +11,7 @@ Window {
     height: 600
     visible: true
     title: qsTr("SDK Manager")
+    minimumWidth: 640
 
     WSLManager {
         id: manager
