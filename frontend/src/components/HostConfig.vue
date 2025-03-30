@@ -1,7 +1,7 @@
 <!-- Host Configuration Component -->
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, warn } from 'vue';
 import {
   FwbCard, FwbSelect, FwbA, FwbButton, FwbModal, FwbTable,
   FwbTableBody,
@@ -11,6 +11,7 @@ import {
   FwbTableRow,
 } from 'flowbite-vue'
 import { wslManager, waitForQWebChannel } from '../main';
+import router from '../router/router';
 const selectedWSLDistro = ref('')
 
 const wslDistros = [
@@ -24,6 +25,7 @@ const wslDistros = [
  */
 
 const wslInfoDisplay = ref(null)
+const wslVersionMajor = ref(null)
 
 const refreshDistros = () => {
   console.log("Refresh WSL info...")
@@ -35,8 +37,22 @@ const parseWSLInfo = () => {
   wslManager.wslInfoReceived.connect((obj) => {
     if (Object.keys(obj).length !== 0) {
       wslInfoDisplay.value = obj
+      const key = Object.keys(obj).find(k => /^WSL\s+[^gG]/.test(k))
+      const value = key ? obj[key] : null
+      if (value !== null) {
+        wslVersionMajor.value = value.split(".")[0]
+        console.log(`Get WSL Version ${value}, Major: ${wslVersionMajor.value}`)
+        if (wslVersionMajor.value !== "1") {
+          const errStr = `Getting WSL version ${value} with major version ${wslVersionMajor.value}, which is incompatible.`
+          router.push(`/error/${errStr}`)
+        }
+      } else {
+        console.warn("Warning: Unable to read WSL version")
+      }
+
     } else {
       wslInfoDisplay.value = null
+      console.warn("Can't read wsl information from backend")
     }
   })
 }
@@ -105,7 +121,7 @@ onMounted(async () => {
   </fwb-card>
 
   <!-- Modal -->
-  <fwb-modal v-if="isShowModal" @close="closeModal">
+  <fwb-modal v-if="isShowModal" @close="closeModal" class="overflow-y-hidden">
     <template #header>
       <div class="flex items-center text-lg text-gray-700 dark:text-white">
         WSL Information
@@ -115,7 +131,11 @@ onMounted(async () => {
       <fwb-table>
         <fwb-table-head>
           <fwb-table-head-cell>Name</fwb-table-head-cell>
-          <fwb-table-head-cell>Value</fwb-table-head-cell>
+          <fwb-table-head-cell class="flex space-x-3 items-center justify-end">
+            <p>Value</p>
+            <fwb-button size="xs" color="dark" @click="parseWSLInfo">Refresh</fwb-button>
+          </fwb-table-head-cell>
+
         </fwb-table-head>
         <fwb-table-body>
           <fwb-table-row v-for="(value, key) in wslInfoDisplay" :key="key">
