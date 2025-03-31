@@ -42,7 +42,7 @@ const parseWSLInfo = () => {
       if (value !== null) {
         wslVersionMajor.value = value.split(".")[0]
         console.log(`Get WSL Version ${value}, Major: ${wslVersionMajor.value}`)
-        if (wslVersionMajor.value !== "1") {
+        if (wslVersionMajor.value !== "2") {
           const errStr = `Getting WSL version ${value} with major version ${wslVersionMajor.value}, which is incompatible.`
           router.push(`/error/${errStr}`)
         }
