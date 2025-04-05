@@ -14,11 +14,7 @@ import { wslManager, waitForQWebChannel } from '../main';
 import router from '../router/router';
 const selectedWSLDistro = ref('')
 
-const wslDistros = [
-  { value: '0', name: 'Ubuntu-18.04' },
-  { value: '1', name: 'Ubuntu-20.04' },
-  { value: '2', name: 'Ubuntu-22.04' },
-]
+const wslDistros = ref([])
 
 /**
  * Qt Related
@@ -27,33 +23,95 @@ const wslDistros = [
 const wslInfoDisplay = ref(null)
 const wslVersionMajor = ref(null)
 
-const refreshDistros = () => {
+const refreshWSLInfo = () => {
+  wslManager.getWSLInfo()
   console.log("Refresh WSL info...")
-  parseWSLInfo()
+}
+const refreshWSLDistros = () => {
+  wslManager.getWSLDistro()
+  console.log("Refresh WSL info...")
 }
 
-const parseWSLInfo = () => {
-  wslManager.getWSLInfo()
-  wslManager.wslInfoReceived.connect((obj) => {
-    if (Object.keys(obj).length !== 0) {
-      wslInfoDisplay.value = obj
-      const key = Object.keys(obj).find(k => /^WSL\s+[^gG]/.test(k))
-      const value = key ? obj[key] : null
-      if (value !== null) {
-        wslVersionMajor.value = value.split(".")[0]
-        console.log(`Get WSL Version ${value}, Major: ${wslVersionMajor.value}`)
-        if (wslVersionMajor.value !== "2") {
-          const errStr = `Getting WSL version ${value} with major version ${wslVersionMajor.value}, which is incompatible.`
-          router.push(`/error/${errStr}`)
-        }
-      } else {
-        console.warn("Warning: Unable to read WSL version")
-      }
 
+const parseWSLInfo = (obj) => {
+  if (Object.keys(obj).length !== 0) {
+    wslInfoDisplay.value = obj
+    const key = Object.keys(obj).find(k => /^WSL\s+[^gG]/.test(k))
+    const value = key ? obj[key] : null
+    if (value !== null) {
+      wslVersionMajor.value = value.split(".")[0]
+      console.log(`Get WSL Version ${value}, Major: ${wslVersionMajor.value}`)
+      if (wslVersionMajor.value !== "2") {
+        const errStr = `Getting WSL version ${value} with major version ${wslVersionMajor.value}, which is incompatible.`
+        router.push(`/error/${errStr}`)
+      }
     } else {
-      wslInfoDisplay.value = null
-      console.warn("Can't read wsl information from backend")
+      console.warn("Warning: Unable to read WSL version")
     }
+
+  } else {
+    wslInfoDisplay.value = null
+    console.warn("Can't read wsl information from backend")
+  }
+
+
+}
+
+const parseWSLDistros = (obj) => {
+
+  if (Object.keys(obj).length === 0) {
+    console.warn("No WSL distro received");
+    return;
+  }
+
+  let tmp = []
+
+  for (const key in obj) {
+    tmp.push({
+      value: key,
+      name: obj[key]
+    })
+  }
+
+  wslDistros.value = tmp // assign
+
+}
+
+const parseWSLError = () => {
+
+}
+
+/**
+ * Echo a 'hello' string with selected distro
+ * Also this command will activate WSL2 (Running)
+ */
+const runDistroHello = (event) => {
+  const value = event.target.value;
+  const name = event.target.name;
+  wslManager.runDistroHello();
+  console.log(`WSL Distro Selected: ${value}. Calling distro...`)
+}
+
+
+
+const setupWSLSignals = () => {
+  wslManager.wslInfoReceived.connect((obj) => {
+    parseWSLInfo(obj);
+    console.log("WSL Info received:", obj);
+  })
+
+  wslManager.wslDistroReceived.connect((obj) => {
+    parseWSLDistros(obj);
+    console.log("WSL Distro received:", obj);
+  })
+
+  wslManager.wslErrorReceived.connect((str) => {
+    parseWSLError(str);
+    console.error(`WSL Error Received: ${str}`);
+  })
+
+  wslManager.wslHelloReceived.connect((status) => {
+    console.log(`WSL Hello Status: ${status}`)
   })
 }
 
@@ -74,8 +132,11 @@ const showModal = () => {
  * Some Vue Lifecycle Functions
 */
 onMounted(async () => {
-  await waitForQWebChannel();
-  parseWSLInfo()
+  await waitForQWebChannel()
+  setupWSLSignals()
+  wslManager.getWSLInfo()
+  wslManager.getWSLDistro()
+
 })
 
 </script>
@@ -92,7 +153,8 @@ onMounted(async () => {
         </p>
 
         <div class="flex space-x-2">
-          <fwb-select v-model="selectedWSLDistro" :options="wslDistros" label="WSL2 Distribution">
+          <fwb-select v-model="selectedWSLDistro" :options="wslDistros" label="WSL2 Distribution"
+            @change="runDistroHello">
             <template #helper>
               Learn how we utilize WSL2. Read our
               <fwb-a href="#" color="text-blue-600 dark:text-blue-500">
@@ -101,7 +163,7 @@ onMounted(async () => {
             </template>
           </fwb-select>
         </div>
-        <fwb-button size="xs" color="dark" outline pill square @click="refreshDistros">
+        <fwb-button size="xs" color="dark" outline pill square @click="refreshWSLDistros">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-3">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -133,7 +195,7 @@ onMounted(async () => {
           <fwb-table-head-cell>Name</fwb-table-head-cell>
           <fwb-table-head-cell class="flex space-x-3 items-center justify-end">
             <p>Value</p>
-            <fwb-button size="xs" color="dark" @click="parseWSLInfo">Refresh</fwb-button>
+            <fwb-button size="xs" color="dark" @click="refreshWSLInfo">Refresh</fwb-button>
           </fwb-table-head-cell>
 
         </fwb-table-head>

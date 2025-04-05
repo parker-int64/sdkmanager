@@ -18,19 +18,27 @@ public:
     {
         GetWSLInfo,
         GetWSLDistros,
+        EchoHello,
     };
 
 signals:
     void wslInfoReceived(const QVariantMap &obj);
+    void wslDistroReceived(const QVariantMap &obj);
+    void wslErrorReceived(const QString &err);
+    void wslHelloReceived(const QString &status);
 
 public slots:
     void getWSLInfo();
-    void handleStdOutput();
-    void handleStdError();
+    void getWSLDistro();
+    void runDistroHello();
 
 private:
-    bool handlePSCmd(const QString &cmd);
+    QString decodeOutput(const QByteArray &array, WSLCmd cmd);
+    void handleStdOutput();
+    void handleStdError();
     void processWSLInfoStr(const QString &str);
+    void processWSLDistro(const QString &str);
+    void processWSLRunHello(const QString &str);
 
     QProcess m_process;
     QString m_stdOutput;
