@@ -120,7 +120,6 @@ QString WSLManager::decodeOutput(const QByteArray &array, WSLCmd cmd)
 void WSLManager::handleStdOutput()
 {
     QByteArray rawArray = m_process.readAllStandardOutput();
-    QString output = decodeOutput(rawArray, m_curCmd);
 
     if (rawArray.isEmpty())
     {
@@ -128,6 +127,7 @@ void WSLManager::handleStdOutput()
         return;
     }
 
+    QString output = decodeOutput(rawArray, m_curCmd);
     qDebug() << "[Output]" << output.trimmed();
     m_stdOutput = output;
 
@@ -150,14 +150,14 @@ void WSLManager::handleStdOutput()
 void WSLManager::handleStdError()
 {
     QByteArray errArray = m_process.readAllStandardError();
-    QString errOutput = decodeOutput(errArray, m_curCmd);
 
-    if (errOutput.isEmpty())
+    if (errArray.isEmpty())
     {
         qWarning() << "Reading empty error output." << Qt::endl;
         return;
     }
 
+    QString errOutput = decodeOutput(errArray, m_curCmd);
     qWarning() << "[Error] " << errOutput.trimmed();
     m_errOutput = errOutput;
     QString e = QString("Error occurred during executing command '%1':\n").arg(m_errOutput);
