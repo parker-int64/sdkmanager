@@ -3,6 +3,7 @@
 #include <QtWebEngineQuick>
 #include <QtWebChannel/QtWebChannel>
 #include "wslmanager.h"
+#include "appcontroller.h"
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -16,10 +17,10 @@ int main(int argc, char *argv[])
         { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-    WSLManager *controller = new WSLManager();
+    // These controller classes will be initialized in QML
+    // And accessible from frontend
     qmlRegisterType<WSLManager>("com.seeed.wsl", 1, 0, "WSLManager");
-    // access through qml
-    engine.rootContext()->setContextProperty("controller", controller);
+    qmlRegisterType<AppController>("com.seeed.appctrl", 1, 0, "AppController");
 
     engine.loadFromModule("SDKManager", "Main");
 

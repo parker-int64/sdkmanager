@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtWebEngine
 import QtWebChannel
 import com.seeed.wsl
+import com.seeed.appctrl
 
 Window {
     id: app
@@ -15,7 +16,12 @@ Window {
 
     WSLManager {
         id: manager
-        WebChannel.id: "wslmanager"
+        WebChannel.id: "wslManager"
+    }
+
+    AppController {
+        id: appctrl
+        WebChannel.id: "appController"
     }
 
     WebEngineView {
@@ -34,7 +40,7 @@ Window {
 
     WebChannel {
         id: channel
-        registeredObjects: [manager]
+        registeredObjects: [manager, appctrl]
     }
 
     BusyIndicator {

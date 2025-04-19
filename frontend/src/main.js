@@ -9,43 +9,42 @@ import App from './App.vue'
 
 
 export let wslManager = null;
-export const waitForQWebChannel = () => {
-    return new Promise((resolve, reject) => {
-        if (wslManager !== null) {
-            resolve(wslManager);
-            return;
-        }
+export let appController = null;
 
-        window.onload = () => {
-            if (window.qt === undefined) {
-                console.error("Failed to Inject QtWebChannel...");
-                reject("Failed to Inject QtWebChannel");
+let qWebChannelReady = null;
+export const waitForQWebChannel = () => {
+    // if initialized, return the current Promise.
+    if (qWebChannelReady) {
+        return qWebChannelReady;
+    }
+
+    // Initialize
+    qWebChannelReady = new Promise((resolve, reject) => {
+        const initialize = () => {
+            if (window.qt === undefined || !window.qt.webChannelTransport) {
+                console.error("Qt WebChannel not available.");
+                reject("Qt WebChannel not available");
                 return;
             }
 
             new QWebChannel(window.qt.webChannelTransport, (channel) => {
                 window.qWebChannel = channel;
-                wslManager = channel.objects.wslmanager;
-                resolve(wslManager); // Initialized and resolve
+                wslManager = channel.objects.wslManager;
+                appController = channel.objects.appController;
+                console.log("QWebChannel initialized.");
+                resolve({ appController, wslManager });
             });
-
-            console.log("Info: Initialized QWebChannel.");
         };
+
+        if (document.readyState === "complete" || document.readyState === "interactive") {
+            initialize();
+        } else {
+            window.addEventListener("load", initialize);
+        }
     });
+
+    return qWebChannelReady;
 }
-// window.onload = () => {
-//     if (window.qt === undefined) {
-//         console.error("Failed to Inject QtWebChannel...");
-//         return;
-//     }
-//     new QWebChannel(window.qt.webChannelTransport, (channel) => {
-//         // all published objects are available in channel.objects under
-//         // the identifier set in their attached WebChannel.id property
-//         window.qWebChannel = channel;
-//         wslManager = channel.objects.wslmanager;
-//     })
-//     console.log("Info: Initialized QWebChannel.")
-// }
 
 
 const app = createApp(App)
