@@ -1,7 +1,27 @@
 <script setup>
+import { onMounted } from 'vue'
 import { FwbButton } from 'flowbite-vue'
 import { useRoute } from 'vue-router';
+
+import { appController, waitForQWebChannel } from '../main';
+
 const route = useRoute()
+
+const restartApp = () => {
+  appController.restartApp()
+}
+
+const closeApp = () => {
+  appController.closeApp()
+}
+
+/**
+ * Some Vue Lifecycle Functions
+*/
+onMounted(async () => {
+  await waitForQWebChannel()
+})
+
 </script>
 
 <template>
@@ -16,8 +36,8 @@ const route = useRoute()
           program crashed.</p>
         <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">{{ route.params.errStr }}</p>
         <div class="flex justify-between">
-          <fwb-button color="dark" outline>Restart Application</fwb-button>
-          <fwb-button color="dark">Quit</fwb-button>
+          <fwb-button color="dark" outline @click="restartApp">Restart Application</fwb-button>
+          <fwb-button color="dark" @click="closeApp">Quit</fwb-button>
         </div>
       </div>
     </div>

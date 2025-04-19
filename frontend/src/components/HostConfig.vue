@@ -132,7 +132,7 @@ const showModal = () => {
  * Some Vue Lifecycle Functions
 */
 onMounted(async () => {
-  await waitForQWebChannel()
+  await waitForQWebChannel();
   setupWSLSignals()
   wslManager.getWSLInfo()
   wslManager.getWSLDistro()
