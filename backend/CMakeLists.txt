@@ -12,6 +12,8 @@ qt_add_executable(appSDKManager
     main.cpp
     wslmanager.h
     wslmanager.cpp
+    appcontroller.h
+    appcontroller.cpp
 )
 
 qt_add_qml_module(appSDKManager
